@@ -67,8 +67,35 @@
 
 <script>
 
-var globalURL = window.location + "";
-var useWindowOpen = isGitHubViewer();
+function changeTheme(update) {
+
+if(update > 0)
+{
+	if(currentTheme == 0)
+		currentTheme = 1;
+	else
+		currentTheme = 0;
+	
+	setCookie("theme", currentTheme, 9999);
+	
+	document.getElementById('theme').value = currentTheme;
+}
+
+	
+var htmlElement = document.querySelector("html");
+
+if(currentTheme == 0)
+{
+	htmlElement.style.color = "black";
+	htmlElement.style.backgroundColor = "white";
+}
+else
+{
+	htmlElement.style.color = "white";
+	htmlElement.style.backgroundColor = "black";
+}
+
+}
 
 window.onload = function() {
         //document.updateView.action = getURLAction();
@@ -114,46 +141,9 @@ function getCookie(cname) {
   return "";
 }
 
-var currentTheme=0;
 
-var currentTheme = getCookie("theme");
-	if(currentTheme == "")
-		currentTheme = 0;
-		
-
-function changeTheme(update) {
-
-if(update > 0)
-{
-	if(currentTheme == 0)
-		currentTheme = 1;
-	else
-		currentTheme = 0;
-	
-	setCookie("theme", currentTheme, 9999);
-}
-
-	
-var htmlElement = document.querySelector("html");
-
-if(currentTheme == 0)
-{
-	htmlElement.style.color = "black";
-	htmlElement.style.backgroundColor = "white";
-}
-else
-{
-	htmlElement.style.color = "white";
-	htmlElement.style.backgroundColor = "black";
-}
-}
-
-
-changeTheme(0);
-
-
-var queryDict = {}
-location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+var globalURL = window.location + "";
+var useWindowOpen = isGitHubViewer();
 
 var maxIndex = 1836;
 var startIndex;
@@ -161,8 +151,30 @@ var endIndex ;
 
 var index;
 var isShowIndex;
-
 var displayItems=9;
+
+var currentTheme=0;
+
+var queryDict = {};
+location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
+
+
+if(queryDict["theme"] === undefined)
+{
+	currentTheme = getCookie("theme");
+	if(currentTheme == "")
+		currentTheme = 0;
+}
+else
+{
+	currentTheme = parseInt(queryDict["theme"]);
+}	
+		
+
+changeTheme(0);
+
+
+
 
 
 if (typeof window.orientation !== 'undefined') { displayItems = 3; } else {
@@ -231,6 +243,7 @@ var nextEndIndex = endIndex + displayItems + 1;
 <input type="number" style="width:4em" id="start" name="start" value=1 min=1 max=1836 /> から 
 <input type="number" style="width:4em" id="end" name="end" value=1836 min=1 max=1836 > まで &nbsp; &nbsp;&nbsp; </input>
 <input type="hidden" id="isShowIndex" name="isShowIndex" /> 
+<input type="hidden" id="theme" name="theme" /> 
 <!-- <input type="submit" value="送信" id="updateViewSubmitBtn" name="updateViewSubmitBtn"/> -->
 
 </form>
@@ -2110,6 +2123,8 @@ var element = document.getElementById("https://github.com/hunghm3/jp/blob/main/j
 element.parentNode.removeChild(element);
 }
 
+document.getElementById('theme').value = currentTheme;
+
 
 function get_action(nstart, nend, nvisible) {
 		var cUrl = globalURL;
@@ -2212,8 +2227,14 @@ function get_action(nstart, nend, nvisible) {
 </body>
 
 <script>
-
-
+/*
+for (test = 0; test <= maxIndex; test++){
+	var elementName = 'question'+ test.toString();
+	var spaceName = 'space' + test.toString();
+	document.getElementById(elementName).style.display = 'none';
+	document.getElementById(spaceName).style.display = 'none';
+}
+*/
 for (index = startIndex; index <= endIndex; index++){
 	var elementName = 'question'+ index.toString();
 	var spaceName = 'space' + index.toString();
