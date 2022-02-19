@@ -1,0 +1,7 @@
+[General]
+skip-proxy = 192.168.11.0/24, localhost, *.local
+bypass-tun = 192.168.11.0/24
+loglevel = notify
+
+[Rule]
+FINAL,PROXY
